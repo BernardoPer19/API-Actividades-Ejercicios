@@ -10,7 +10,7 @@ export class modeloEjerciciosCardio {
         }
     }
 
-    static async  verEjercicioId ([id]){
+    static async  verEjercicioId (id){
         try {
             const {rows} = await pool.query('SELECT * FROM ejercicios_cardio_tb WHERE id = $1',[id]);
             return rows[0];
@@ -19,10 +19,12 @@ export class modeloEjerciciosCardio {
         }
     }
 
-    static async crearEjercicioCardio ([nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url]){
+    static async crearEjercicioCardio ({nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url}){
         try {
            
-            const {rows: grupo_muscular} = await pool.query('SELECT 1 FROM grupo_muscular_tb WHERE  grupo_muscular_id = $1',[grupo_muscular_id])
+            const {rows: grupo_muscular} = await pool.query(
+                'SELECT 1 FROM grupo_muscular_tb WHERE  grupo_muscular_id = $1',
+                [grupo_muscular_id])
             
             const { rows: tipoEjercicio } = await pool.query(
                 "SELECT 1 FROM tipo_ejercicio_tb WHERE tipo_ejercicio_id = $1",
@@ -52,7 +54,7 @@ export class modeloEjerciciosCardio {
         }
     }
 
-    static async actualizarEjercicioCardio ([nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url,id]) {
+    static async actualizarEjercicioCardio ({nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url,id}) {
         try {
 
             
