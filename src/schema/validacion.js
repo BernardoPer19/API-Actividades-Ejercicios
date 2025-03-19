@@ -6,7 +6,7 @@ export const tiposYGruposEsquema = z.object({
     .min(3, "El nombre debe tener al menos 3 caracteres")
     .max(50, "El nombre no puede exceder los 50 caracteres")
     .trim(),
-  descripcion: z
+  desc: z
     .string()
     .min(3, "La descripción debe tener al menos 3 caracteres")
     .max(255, "La descripción no puede exceder los 255 caracteres")

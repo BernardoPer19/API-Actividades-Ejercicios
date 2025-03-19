@@ -1,12 +1,12 @@
 import { modeloEjerciciosCardio } from "../model/ejerciciosCardio.model.js";
-import { validarTiposYGruposEsquema } from "../schema/validacion.js";
+
 
 
 export class controllerEjericiosCardio {
     static  obtenerEjercicios  = async (req,res) =>{
         try {
             const result = await modeloEjerciciosCardio.verEjercicios();
-            result.status(200).json(result);
+            res.status(200).json(result);
         } catch (error) {
             res.status(500).json({message : 'error al obtener los ejercicios ', error:error})
         }
@@ -42,7 +42,7 @@ export class controllerEjericiosCardio {
         }
     }
 
-    static eliminarEjercicio = async (req,res) =>{
+    static eliminarEjercicioCardio = async (req,res) =>{
         try {
             const {id} = req.params;
             const result = await modeloEjerciciosCardio.eiminarEjercicioCardio(id);
@@ -56,7 +56,7 @@ export class controllerEjericiosCardio {
         }
     }
 
-    static actualizarEjercicio = async (req,res) =>{
+    static actualizarEjercicioCardio = async (req,res) =>{
         const {id} = req.params;
         try {
             const vali = validarTiposYGruposEsquema(req.body)
@@ -64,7 +64,7 @@ export class controllerEjericiosCardio {
                 return res.status(500).json({error: JSON.parse(vali.error.message)})
             }
 
-            const result = await modeloEjerciciosCardio.actualizarEjercicioCardio(vali.data, id);
+            const result = await modeloEjerciciosCardio.actualizarEjercicioCardio({ ...vali.data, id });
             if(!result) {
                 return res.status(404).json({message : 'no se encontro el ejercicio'});
             }

@@ -1,11 +1,11 @@
 import { modeloGrupouscular } from "../model/grupoMuscular.model.js";
-import { validarEjercicios,validarPartesEjercicios } from "../schema/validacion.js";
+import { validarTiposYGruposEsquema } from "../schema/validacion.js";
 
 export class controllerGrupoMuscular {
     static  getGrupos  = async (req,res) =>{
         try {
             const result = await modeloGrupouscular.verGrupos();
-            result.status(200).json(result);
+            res.status(200).json(result);
         } catch (error) {
             res.status(500).json({message : 'error al obtener los grupos musculares ', error:error})
         }
@@ -15,7 +15,7 @@ export class controllerGrupoMuscular {
         try {
             const {id} = req.params;
 
-            const result = await modeloGrupouscular.getGruposPorId(id);
+            const result = await modeloGrupouscular.verGrupoPorId(id);
             if(!result){
                 return res.status(400).json({message: ' no  se encontro el grupo muscular'});
             }
@@ -29,7 +29,7 @@ export class controllerGrupoMuscular {
 
     static crearGrupoMuscular = async (req,res) =>{
         try {
-            const vali = validarEjercicios(req.body);
+            const vali = validarTiposYGruposEsquema(req.body);
             if(!vali.success){
                 return res.status(500).json({error: JSON.parse(vali.error.message)})
             }
@@ -46,7 +46,7 @@ export class controllerGrupoMuscular {
             const {id} = req.params;
             const result = await modeloGrupouscular.eliminarGrupoMuscular(id);
             if(!result){
-                return res.status(400).json({message: 'no se encontro el user'});
+                return res.status(400).json({message: 'no se encontro el grupo muscular'});
             }
 
             res.status(200).json({message : 'se elimino el grupoMuscular'})
@@ -58,12 +58,12 @@ export class controllerGrupoMuscular {
     static mejorarGrupoMuscular = async (req,res) =>{
         const {id} = req.params;
         try {
-            const vali = validarPartesEjercicios(req.body)
+            const vali = validarTiposYGruposEsquema(req.body)
             if(!vali.success){
                 return res.status(500).json({error: JSON.parse(vali.error.message)})
             }
 
-            const result = await modeloGrupouscular.actualizarGrupoMuscular(vali.data, id);
+            const result = await modeloGrupouscular.actualizarGrupoMuscular(id, vali.data);
             if(!result) {
                 return res.status(404).json({message : 'no se encontro la cita'});
             }

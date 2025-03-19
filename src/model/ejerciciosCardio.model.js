@@ -3,23 +3,23 @@ import { pool } from "../db/db.js";
 export class modeloEjerciciosCardio {
     static async verEjercicios () {
         try {
-            const {result} = await pool.query('SELECT FROM ejercicios_cardio_tb');
-             return result;
+            const {rows} = await pool.query('SELECT * FROM ejercicios_cardio_tb');
+             return rows;
         } catch (error) {
             console.error('error al obtener datos en el modelo', error);
         }
     }
 
-    static async  verEjercicioId (id){
+    static async  verEjercicioId ([id]){
         try {
-            const {result} = await pool.query('SELECT * FROM ejercicios_cardio_tb WHERE id = $1',[id]);
-            return result[0];
+            const {rows} = await pool.query('SELECT * FROM ejercicios_cardio_tb WHERE id = $1',[id]);
+            return rows[0];
         } catch (error) {
             console.error('error al obtener datos por id en el modelo', error);
         }
     }
 
-    static async crearEjercicioCardio (nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url){
+    static async crearEjercicioCardio ([nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url]){
         try {
            
             const {rows: grupo_muscular} = await pool.query('SELECT 1 FROM grupo_muscular_tb WHERE  grupo_muscular_id = $1',[grupo_muscular_id])
@@ -33,10 +33,10 @@ export class modeloEjerciciosCardio {
                  }
 
             const {rows} = await pool.query
-            (`INSERT INTO ejercicios_cardio_tb(nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url) VALUES ($1,$2,$3,$4,$5,$6,$7)`
-                ,[nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url]);
+            (`INSERT INTO ejercicios_cardio_tb(nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url) VALUES ($1,$2,$3,$4,$5,$6,$7)  RETURNING *`
+                ,[nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url] );
 
-            return rows;
+            return rows[0];
         } catch (error) {
             console.error('error al crear datos en el modelo', error);
         }
@@ -52,12 +52,12 @@ export class modeloEjerciciosCardio {
         }
     }
 
-    static async actualizarEjercicioCardio (nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url,id) {
+    static async actualizarEjercicioCardio ([nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url,id]) {
         try {
 
             
             const {result} = await pool.query
-            (`UPDATE ejercicios_cardio_tb SET nombre = $1 , desc = $2 , grupo_muscular_id = $3 , tipo_ejercicio_id = $4, dificulad = $5 , duracion_recomendada = $6 , imagen-url = $7 WHERE id = $8`
+            (`UPDATE ejercicios_cardio_tb SET nombre = $1 , desc = $2 , grupo_muscular_id = $3 , tipo_ejercicio_id = $4, dificultad = $5 , duracion_recomendada = $6 , imagen_url = $7 WHERE id = $8`
                 ,[nombre,desc,grupo_muscular_id,tipo_ejercicio_id,dificultad,duracion_recomendada,imagen_url,id])
             
             if(result.affectedRows === 0){return null}

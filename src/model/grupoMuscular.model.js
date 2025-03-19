@@ -3,8 +3,8 @@ import { pool } from "../db/db.js";
 export class modeloGrupouscular {
     static async verGrupos () {
         try {
-            const {result} = await pool.query('SELECT * FROM grupo_muscular_tb');
-             return result;
+            const {rows} = await pool.query('SELECT * FROM grupo_muscular_tb');
+             return rows;
         } catch (error) {
             console.error('error al obtener datos en el modelo', error);
         }
@@ -12,8 +12,8 @@ export class modeloGrupouscular {
 
     static async  verGrupoPorId (id){
         try {
-            const {result} = await pool.query('SELECT * FROM grupo_muscular_tb WHERE id = $1',[id]);
-            return result[0];
+            const {rows} = await pool.query('SELECT * FROM grupo_muscular_tb WHERE id = $1',[id]);
+            return rows[0];
         } catch (error) {
             console.error('error al obtener datos por id en el modelo', error);
         }
