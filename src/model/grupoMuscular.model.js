@@ -19,7 +19,7 @@ export class modeloGrupouscular {
         }
     }
 
-    static async cerarGrupoMuscular (nombre,desc){
+    static async crearGrupoMuscular (nombre,desc){
         try {
             const {rows} = await pool.query('INSERT INTO grupo_muscular_tb(nombre,desc) VALUES ($1,$2)',[nombre,desc]);
 
@@ -32,7 +32,8 @@ export class modeloGrupouscular {
     static async eliminarGrupoMuscular (id) {
         try {
             const {result} = await pool.query('DELETE FROM  grupo_muscular_tb WHERE id = $1',[id])
-            return result.affectedRows >0;
+            if(result.affectedRows === 0){return null}
+            return result
         } catch (error) {
             console.error('error al eliminar datos en el modelo', error);
         }

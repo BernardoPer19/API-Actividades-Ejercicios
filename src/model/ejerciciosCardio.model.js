@@ -1,6 +1,6 @@
 import { pool } from "../db/db.js"; 
 
-export class modeloGrupouscular {
+export class modeloEjerciciosCardio {
     static async verEjercicios () {
         try {
             const {result} = await pool.query('SELECT FROM ejercicios_cardio_tb');
@@ -45,7 +45,8 @@ export class modeloGrupouscular {
     static async eiminarEjercicioCardio (id) {
         try {
             const {result} = await pool.query('DELETE FROM  ejercicios_cardio_tb WHERE id = $1',[id])
-            return result.affectedRows >0;
+            if(result.affectedRows === 0){return null}
+            return result
         } catch (error) {
             console.error('error al eliminar datos en el modelo', error);
         }
@@ -61,7 +62,7 @@ export class modeloGrupouscular {
             
             if(result.affectedRows === 0){return null}
 
-            const {rows} = await pool.query('SELECT * FROM ejercicios_cardio_tb WHERE id = $8',[id])
+            const {rows} = await pool.query('SELECT * FROM ejercicios_cardio_tb WHERE id = $1',[id])
             
             return rows[0];
         } catch (error) {
