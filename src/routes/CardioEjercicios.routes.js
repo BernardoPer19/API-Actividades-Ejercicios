@@ -1,4 +1,4 @@
-import { controllerEjericiosCardio } from "../controller/controllerEjerciciosCardio.controller.js";
+import { controllerEjericiosCardio } from "../controllers/controllerEjerciciosCardio.controller.js";
 import { Router } from "express";
 
 

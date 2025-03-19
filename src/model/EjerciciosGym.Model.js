@@ -30,39 +30,37 @@ export class ModeladoEjerciciosGym {
   static async añadirEjerciciosGym(
     nombre,
     desc,
-    grupo_muscular_id,
+    muscular_id,
     tipo_ejercicio_id,
     dificultad,
-    duracion_recomendada,
-    imagen_url
+    img
   ) {
     try {
       const { rows: grupoMuscular } = await pool.query(
-        "SELECT 1 FROM grupo_muscular_tb WHERE muscular_id = $1",
-        [grupo_muscular_id]
+        "SELECT 1 FROM ejercicios_gym_tb WHERE muscular_id = $1",
+        [muscular_id]
       );
       const { rows: tipoEjercicio } = await pool.query(
-        "SELECT 1 FROM tipo_ejercicio_tb WHERE tipo_ejercicio_id = $1",
+        "SELECT 1 FROM ejercicios_gym_tb WHERE tipo_ejercicio_id = $1",
         [tipo_ejercicio_id]
       );
 
       if (grupoMuscular.length === 0 || tipoEjercicio.length === 0) {
-        throw new Error("El grupo muscular o tipo de ejercicio no existe.");
+        throw new Error("El ejercicio o tipo de ejercicio no existe.");
       }
 
       const query = `
-        INSERT INTO ejercicios_gym_tb (nombre, desc, grupo_muscular_id, tipo_ejercicio_id, dificultad, duracion_recomendada, imagen_url)
-        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
-      `;
+      INSERT INTO ejercicios_gym_tb (nombre, "desc", muscular_id, tipo_ejercicio_id, dificultad, img)
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
+    `;
 
       const { rows } = await pool.query(query, [
         nombre,
         desc,
-        grupo_muscular_id,
+        muscular_id,
         tipo_ejercicio_id,
         dificultad,
-        duracion_recomendada,
-        imagen_url,
+        img,
       ]);
 
       return rows[0];
@@ -88,19 +86,37 @@ export class ModeladoEjerciciosGym {
     }
   }
 
-  static async actualizarEjerciciosGym(id, nombre, desc) {
+  static async actualizarEjerciciosGym(
+    id,
+    nombre,
+    desc,
+    muscular_id,
+    tipo_ejercicio_id,
+    dificultad,
+    img
+  ) {
     try {
-      const { rowCount } = await pool.query(
-        "UPDATE ejercicios_gym_tb SET nombre = $1, desc = $2 WHERE id = $3",
-        [nombre, desc, id]
-      );
+      const query = `
+        UPDATE ejercicios_gym_tb 
+        SET nombre = $1, "desc" = $2, muscular_id = $3, tipo_ejercicio_id = $4, dificultad = $5, img = $6
+        WHERE id = $7 
+        RETURNING *;
+      `;
+
+      const { rows, rowCount } = await pool.query(query, [
+        nombre,
+        desc,
+        muscular_id,
+        tipo_ejercicio_id,
+        dificultad,
+        img,
+        id,
+      ]);
+
       if (rowCount === 0) {
         throw new Error("No se encontró el ejercicio con el ID proporcionado.");
       }
-      const { rows } = await pool.query(
-        "SELECT * FROM ejercicios_gym_tb WHERE id = $1",
-        [id]
-      );
+
       return rows[0];
     } catch (error) {
       console.error("Error al actualizar el ejercicio:", error);
