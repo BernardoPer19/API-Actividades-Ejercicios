@@ -1,4 +1,3 @@
-import express, { json } from "express";
 import { RutasEjercicios } from "./routes/GymEjercicios.js";
 
 const app = express();
