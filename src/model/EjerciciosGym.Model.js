@@ -30,39 +30,38 @@ export class ModeladoEjerciciosGym {
   static async añadirEjerciciosGym(
     nombre,
     desc,
-    grupo_muscular_id,
+    muscular_id,
     tipo_ejercicio_id,
     dificultad,
-    duracion_recomendada,
-    imagen_url
+    img
   ) {
     try {
       const { rows: grupoMuscular } = await pool.query(
-        "SELECT 1 FROM grupo_muscular_tb WHERE muscular_id = $1",
-        [grupo_muscular_id]
+        "SELECT 1 FROM ejercicios_gym_tb WHERE muscular_id = $1",
+        [muscular_id]
       );
       const { rows: tipoEjercicio } = await pool.query(
-        "SELECT 1 FROM tipo_ejercicio_tb WHERE tipo_ejercicio_id = $1",
+        "SELECT 1 FROM ejercicios_gym_tb WHERE tipo_ejercicio_id = $1",
         [tipo_ejercicio_id]
       );
 
       if (grupoMuscular.length === 0 || tipoEjercicio.length === 0) {
-        throw new Error("El grupo muscular o tipo de ejercicio no existe.");
+        throw new Error("El ejercicio o tipo de ejercicio no existe.");
       }
 
       const query = `
-        INSERT INTO ejercicios_gym_tb (nombre, desc, grupo_muscular_id, tipo_ejercicio_id, dificultad, duracion_recomendada, imagen_url)
-        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
-      `;
+      INSERT INTO ejercicios_gym_tb (nombre, "desc", muscular_id, tipo_ejercicio_id, dificultad, img)
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
+    `;
+    
 
       const { rows } = await pool.query(query, [
         nombre,
         desc,
-        grupo_muscular_id,
+        muscular_id,
         tipo_ejercicio_id,
         dificultad,
-        duracion_recomendada,
-        imagen_url,
+        img,
       ]);
 
       return rows[0];
