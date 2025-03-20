@@ -11,7 +11,7 @@ const ejercicioSchema = z.object({
 
 
 export const validarEjercicios = (input) => {
-  return ejercicioSchema.safeParse(input);
+  return ejercicioSchema.partial().safeParse(input);
 };
 
 export default ejercicioSchema;
