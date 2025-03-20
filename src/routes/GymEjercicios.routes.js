@@ -1,7 +1,7 @@
 
 import { Router } from 'express';
 import { ControllersEjerciciosGym } from '../controllers/ControllersEjerciciosGym.controller.js';
-export const RutasEjercicios = Router();
+export const RutasEjerciciosGym = Router();
 
 RutasEjercicios.get("/",ControllersEjerciciosGym.mostrarEjercicios);
 RutasEjercicios.get("/:id",ControllersEjerciciosGym.mostrarEjerciciosId);
