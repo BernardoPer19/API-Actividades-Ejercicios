@@ -4,6 +4,7 @@ import { routerGrupoMuscular } from "./routes/GruposMusculares.routes.js";
 import { RutasEjerciciosGym } from "./routes/GymEjercicios.routes.js";
 
 const app = express();
+app.use(express.json()); 
 
 app.use("/grupoMuscular", routerGrupoMuscular);
 app.use("/ejercicio-cardio", routerEjercicio);
