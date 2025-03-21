@@ -1,14 +1,20 @@
 import { controllerEjericiosCardio } from "../controllers/controllerEjerciciosCardio.controller.js";
 import { Router } from "express";
 
+export const iniciarEjercicioCardio = ({modeloEjerciciosCardio}) =>{
 
- export const routerEjercicio = Router();
+    const routerEjercicio = Router();
 
- routerEjercicio.get('/', controllerEjericiosCardio.obtenerEjercicios);
- routerEjercicio.get('/:id', controllerEjericiosCardio.obtenerEjercicioPorId); 
- routerEjercicio.post('/', controllerEjericiosCardio.crearEjercicioCardio);
- routerEjercicio.put('/:id', controllerEjericiosCardio.actualizarEjercicioCardio);
- routerEjercicio.delete('/:id', controllerEjericiosCardio.eliminarEjercicioCardio);
+    const controllerEjercicio = new controllerEjericiosCardio ({modeloEjerciciosCardio})
+   
+    routerEjercicio.get('/', controllerEjercicio.obtenerEjercicios);
+    routerEjercicio.get('/:id', controllerEjercicio.obtenerEjercicioPorId); 
+    routerEjercicio.post('/', controllerEjercicio.crearEjercicioCardio);
+    routerEjercicio.put('/:id', controllerEjercicio.actualizarEjercicioCardio);
+    routerEjercicio.delete('/:id', controllerEjercicio.eliminarEjercicioCardio);
+
+    return routerEjercicio;
+}
 
 
  

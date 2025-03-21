@@ -1,13 +1,19 @@
 import express from "express";
-import { routerEjercicio } from "./routes/CardioEjercicios.routes.js";
-import { routerGrupoMuscular } from "./routes/GruposMusculares.routes.js";
+
+import { iniciarEjercicioCardio } from "./routes/CardioEjercicios.routes.js";
+import { modeloEjerciciosCardio } from "./model/ejerciciosCardio.model.js";
+
+
+import { iniciarGrupoMuscular } from "./routes/GruposMusculares.routes.js";
+import { modeloGrupouscular } from "./model/grupoMuscular.model.js";
+
 import { RutasEjerciciosGym } from "./routes/GymEjercicios.routes.js";
 
 const app = express();
 app.use(express.json()); 
 
-app.use("/grupoMuscular", routerGrupoMuscular);
-app.use("/ejercicio-cardio", routerEjercicio);
+app.use("/grupoMuscular", iniciarGrupoMuscular({modeloGrupouscular}));
+app.use("/ejercicio-cardio", iniciarEjercicioCardio({modeloEjerciciosCardio}));
 app.use("/ejercicios", RutasEjerciciosGym);
 
 app.listen(3000, () => {

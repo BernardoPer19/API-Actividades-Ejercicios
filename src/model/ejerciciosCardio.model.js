@@ -16,7 +16,7 @@ export class modeloEjerciciosCardio {
         "SELECT * FROM ejercicios_cardio_tb WHERE id_cardio = $1",
         [id]
       );
-      return rows[0]; // Devuelve el primer resultado de la consulta
+      return rows[0]; 
     } catch (error) {
       console.error("Error al obtener datos por id en el modelo", error);
     }

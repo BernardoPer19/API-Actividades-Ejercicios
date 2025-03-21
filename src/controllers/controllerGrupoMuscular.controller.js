@@ -1,10 +1,14 @@
-import { modeloGrupouscular } from "../model/grupoMuscular.model.js";
+
 import { validarTiposYGruposEsquema } from "../schema/validacion.js";
 
 export class controllerGrupoMuscular {
-  static getGrupos = async (req, res) => {
+  constructor ({modeloGrupouscular}){
+    this.modeloGrupouscular = modeloGrupouscular
+  }
+
+   getGrupos = async (req, res) => {
     try {
-      const result = await modeloGrupouscular.verGrupos();
+      const result = await this.modeloGrupouscular.verGrupos();
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json({
@@ -14,11 +18,11 @@ export class controllerGrupoMuscular {
     }
   };
 
-  static getGruposPorId = async (req, res) => {
+   getGruposPorId = async (req, res) => {
     try {
       const { id } = req.params;
 
-      const result = await modeloGrupouscular.verGrupoPorId(id);
+      const result = await this.modeloGrupouscular.verGrupoPorId(id);
       if (!result) {
         return res
           .status(400)
@@ -34,7 +38,7 @@ export class controllerGrupoMuscular {
     }
   };
 
-  static crearGrupoMuscular = async (req, res) => {
+   crearGrupoMuscular = async (req, res) => {
     try {
       const vali = validarTiposYGruposEsquema(req.body);
       if (!vali.success) {
@@ -42,7 +46,7 @@ export class controllerGrupoMuscular {
       }
       const { muscular_id, nombre, desc } = vali.data;
 
-      const nuevoMusculo = await modeloGrupouscular.crearGrupoMuscular(
+      const nuevoMusculo = await this.modeloGrupouscular.crearGrupoMuscular(
         muscular_id,
         nombre,
         desc
@@ -57,10 +61,10 @@ export class controllerGrupoMuscular {
     }
   };
 
-  static eliminarGrupoMuscular = async (req, res) => {
+   eliminarGrupoMuscular = async (req, res) => {
     try {
       const { id } = req.params;
-       await modeloGrupouscular.eliminarGrupoMuscular(id);
+       await this.modeloGrupouscular.eliminarGrupoMuscular(id);
     
 
       res.status(200).json({ message: "se elimino el grupoMuscular" });
@@ -72,7 +76,7 @@ export class controllerGrupoMuscular {
     }
   };
 
-  static mejorarGrupoMuscular = async (req, res) => {
+   mejorarGrupoMuscular = async (req, res) => {
     const { id } = req.params;
     try {
       const vali = validarTiposYGruposEsquema(req.body);
@@ -80,7 +84,7 @@ export class controllerGrupoMuscular {
         return res.status(500).json({ error: JSON.parse(vali.error.message) });
       }
 
-      const result = await modeloGrupouscular.actualizarGrupoMuscular(
+      const result = await this.modeloGrupouscular.actualizarGrupoMuscular(
         id,
         vali.data
       );
@@ -96,3 +100,4 @@ export class controllerGrupoMuscular {
     }
   };
 }
+  

@@ -1,10 +1,14 @@
-import { modeloEjerciciosCardio } from "../model/ejerciciosCardio.model.js";
+
 import { validarEjercicios } from "../schema/validacionCardio.js";
 
 export class controllerEjericiosCardio {
-  static obtenerEjercicios = async (req, res) => {
+  constructor ({modeloEjerciciosCardio}){
+    this.modeloEjerciciosCardio = modeloEjerciciosCardio;
+  }
+
+  obtenerEjercicios = async (req, res) => {
     try {
-      const result = await modeloEjerciciosCardio.verEjercicios();
+      const result = await  this.modeloEjerciciosCardio.verEjercicios();
       res.status(200).json(result);
     } catch (error) {
       res
@@ -15,11 +19,11 @@ export class controllerEjericiosCardio {
 
   
 
-  static obtenerEjercicioPorId = async (req, res) => {
+   obtenerEjercicioPorId = async (req, res) => {
     try {
       const { id } = req.params;
 
-      const result = await modeloEjerciciosCardio.verEjercicioId(id);
+      const result = await  this.modeloEjerciciosCardio.verEjercicioId(id);
       if (!result) {
         return res
           .status(400)
@@ -35,7 +39,7 @@ export class controllerEjericiosCardio {
     }
   };
 
-  static crearEjercicioCardio = async (req, res) => {
+   crearEjercicioCardio = async (req, res) => {
     try {
       const vali = validarEjercicios(req.body);
       if (!vali.success) {
@@ -52,7 +56,7 @@ export class controllerEjericiosCardio {
         img_url,
       } = vali.data;
 
-      const result = await modeloEjerciciosCardio.crearEjercicioCardio(
+      const result = await  this.modeloEjerciciosCardio.crearEjercicioCardio(
         nombre,
         desc,
         muscular_id,
@@ -71,13 +75,13 @@ export class controllerEjericiosCardio {
     }
   };
 
-  static crearEjercicioCardio = async (req, res) => {
+   crearEjercicioCardio = async (req, res) => {
     try {
       const { success, data, error } = validarEjercicios(req.body);
       if (!success)
         return res.status(500).json({ error: JSON.parse(error.message) });
 
-      const result = await modeloEjerciciosCardio.crearEjercicioCardio(
+      const result = await  this.modeloEjerciciosCardio.crearEjercicioCardio(
         ...Object.values(data)
       );
       res.status(200).json(result);
@@ -88,10 +92,10 @@ export class controllerEjericiosCardio {
     }
   };
 
-  static eliminarEjercicioCardio = async (req, res) => {
+   eliminarEjercicioCardio = async (req, res) => {
     try {
       const { id } = req.params;
-      const result = await modeloEjerciciosCardio.eliminarEjercicioCardio(id);
+      const result = await  this.modeloEjerciciosCardio.eliminarEjercicioCardio(id);
       if (!result) {
         return res.status(400).json({ message: "no se encontro el ejercicio" });
       }
@@ -104,16 +108,16 @@ export class controllerEjericiosCardio {
     }
   };
 
-  static actualizarEjercicioCardio = async (req, res) => {
+   actualizarEjercicioCardio = async (req, res) => {
     const { id } = req.params;
     try {
-      // Validar los datos de req.body con la función validarEjercicios
+      
       const vali = validarEjercicios(req.body);
       if (!vali.success) {
         return res.status(400).json({ error: JSON.parse(vali.error.message) });
       }
   
-      // Desestructurar los datos validados
+     
       const {
         nombre,
         desc,
@@ -124,7 +128,7 @@ export class controllerEjericiosCardio {
         img_url,
       } = vali.data;
   
-      // Validar longitud de los campos
+      
       if (nombre.length > 100) {
         return res.status(400).json({ message: "El nombre excede el límite de 100 caracteres." });
       }
@@ -133,8 +137,8 @@ export class controllerEjericiosCardio {
         return res.status(400).json({ message: "La descripción excede el límite de 200 caracteres." });
       }
   
-      // Actualizar el ejercicio en la base de datos
-      const result = await modeloEjerciciosCardio.actualizarEjercicioCardio({
+      
+      const result = await  this.modeloEjerciciosCardio.actualizarEjercicioCardio({
         id,
         nombre,
         desc,
@@ -155,4 +159,6 @@ export class controllerEjericiosCardio {
     }
   };
   
-}  
+}
+   
+ 
