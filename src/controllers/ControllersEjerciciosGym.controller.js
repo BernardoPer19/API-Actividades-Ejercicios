@@ -62,8 +62,7 @@ export class ControllersEjerciciosGym {
   static async eliminarEjercicios(req, res) {
     try {
       const { id } = req.params;
-      const eliminarEjercicio =
-        await ModeladoEjerciciosGym.eliminarEjerciciosGym(id); // Usamos await para esperar a que termine
+      const eliminarEjercicio = await ModeladoEjerciciosGym.eliminarEjerciciosGym(id); 
       return res.json(eliminarEjercicio);
     } catch (error) {
       res.status(500).json({
